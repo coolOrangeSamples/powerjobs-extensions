@@ -7,7 +7,8 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.   #
 #=============================================================================#
 
-Add-Type -Path "$($Env:POWERJOBS_MODULESDIR)\MsOffice\coolOrange.MsOffice.dll"
+Add-Type -Path (Join-Path -Path $Env:POWERJOBS_MODULESDIR -ChildPath 'MsOffice\coolOrange.MsOffice.dll')
+
 Register-Application ([coolOrange.MsOffice.Word.Application])
 Register-Application ([coolOrange.MsOffice.Excel.Application])
 Register-Application ([coolOrange.MsOffice.PowerPoint.Application])
