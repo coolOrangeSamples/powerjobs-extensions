@@ -20,7 +20,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>..\powerJobs\Modules\MsOffice\</OutputPath>
+    <OutDir>..\powerJobs\Modules\MsOffice\</OutDir>
     <StartAction>Program</StartAction>
     <StartProgram>$(windir)\System32\WindowsPowerShell\v1.0\powershell.exe</StartProgram>
     <StartArguments>-noexit -command "Import-Module powerJobs"</StartArguments>
