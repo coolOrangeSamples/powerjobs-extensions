@@ -57,8 +57,25 @@ git checkout version-2025
 git checkout version-2026
 ```
 
+## Pushing Branches to Remote
+
+The three version-specific branches have been created locally and need to be pushed to the remote repository. 
+
+### Option 1: Use the helper script
+```bash
+./push-version-branches.sh
+```
+
+### Option 2: Push manually
+```bash
+git push origin version-2024
+git push origin version-2025
+git push origin version-2026
+```
+
 ## Notes
 
 - This implementation was done for MsOffice only, as specified in the requirements
 - The existing References folder structure with version-specific subdirectories was already in place
 - Each branch maintains minimal changes - only the reference path and removal of the local DLL
+- The branches are created locally and documented here. They need to be pushed by someone with appropriate repository access.
