@@ -2,12 +2,12 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("MSOfficeApplication")]
-[assembly: AssemblyDescription("MSOfficeApplication for powerJobs Processor")]
+[assembly: AssemblyDescription("MSOfficeApplication for powerJobs Processor 2024")]
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MSOfficeApplication")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
