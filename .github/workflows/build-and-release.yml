@@ -1,0 +1,190 @@
+name: Build and Release Multiple Versions
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag name (e.g., v1.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-2024:
+    name: Build 2024 Version
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout 2024 branch
+      uses: actions/checkout@v4
+      with:
+        ref: 2024-version
+        
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+      
+    - name: Restore NuGet packages
+      run: nuget restore MsOffice/MsOfficeApplication.sln
+      
+    - name: Build solution
+      run: msbuild MsOffice/MsOfficeApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
+      
+    - name: Prepare files for packaging
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path package-2024/powerJobs/Jobs
+        New-Item -ItemType Directory -Force -Path package-2024/powerJobs/Modules/MsOffice
+        
+        Copy-Item -Path "MsOffice/powerJobs/Jobs/Sample.MsOffice.CreatePDF.ps1" -Destination "package-2024/powerJobs/Jobs/"
+        Copy-Item -Path "MsOffice/powerJobs/Modules/register-MsOffice-application.psm1" -Destination "package-2024/powerJobs/Modules/"
+        Copy-Item -Path "MsOffice/powerJobs/Modules/MsOffice/coolOrange.MsOffice.dll" -Destination "package-2024/powerJobs/Modules/MsOffice/"
+        
+    - name: Create zip archive
+      shell: pwsh
+      run: |
+        Compress-Archive -Path package-2024/* -DestinationPath MsOffice-2024.zip
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: msoffice-2024
+        path: MsOffice-2024.zip
+
+  build-2025:
+    name: Build 2025 Version
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout 2025 branch
+      uses: actions/checkout@v4
+      with:
+        ref: 2025-version
+        
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+      
+    - name: Restore NuGet packages
+      run: nuget restore MsOffice/MsOfficeApplication.sln
+      
+    - name: Build solution
+      run: msbuild MsOffice/MsOfficeApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
+      
+    - name: Prepare files for packaging
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path package-2025/powerJobs/Jobs
+        New-Item -ItemType Directory -Force -Path package-2025/powerJobs/Modules/MsOffice
+        
+        Copy-Item -Path "MsOffice/powerJobs/Jobs/Sample.MsOffice.CreatePDF.ps1" -Destination "package-2025/powerJobs/Jobs/"
+        Copy-Item -Path "MsOffice/powerJobs/Modules/register-MsOffice-application.psm1" -Destination "package-2025/powerJobs/Modules/"
+        Copy-Item -Path "MsOffice/powerJobs/Modules/MsOffice/coolOrange.MsOffice.dll" -Destination "package-2025/powerJobs/Modules/MsOffice/"
+        
+    - name: Create zip archive
+      shell: pwsh
+      run: |
+        Compress-Archive -Path package-2025/* -DestinationPath MsOffice-2025.zip
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: msoffice-2025
+        path: MsOffice-2025.zip
+
+  build-2026:
+    name: Build 2026 Version
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout 2026 branch
+      uses: actions/checkout@v4
+      with:
+        ref: 2026-Version
+        
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+      
+    - name: Restore NuGet packages
+      run: nuget restore MsOffice/MsOfficeApplication.sln
+      
+    - name: Build solution
+      run: msbuild MsOffice/MsOfficeApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
+      
+    - name: Prepare files for packaging
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path package-2026/powerJobs/Jobs
+        New-Item -ItemType Directory -Force -Path package-2026/powerJobs/Modules/MsOffice
+        
+        Copy-Item -Path "MsOffice/powerJobs/Jobs/Sample.MsOffice.CreatePDF.ps1" -Destination "package-2026/powerJobs/Jobs/"
+        Copy-Item -Path "MsOffice/powerJobs/Modules/register-MsOffice-application.psm1" -Destination "package-2026/powerJobs/Modules/"
+        Copy-Item -Path "MsOffice/powerJobs/Modules/MsOffice/coolOrange.MsOffice.dll" -Destination "package-2026/powerJobs/Modules/MsOffice/"
+        
+    - name: Create zip archive
+      shell: pwsh
+      run: |
+        Compress-Archive -Path package-2026/* -DestinationPath MsOffice-2026.zip
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: msoffice-2026
+        path: MsOffice-2026.zip
+
+  create-release:
+    name: Create GitHub Release
+    needs: [build-2024, build-2025, build-2026]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+        
+    - name: Display structure of downloaded files
+      run: ls -R artifacts
+      
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ inputs.release_tag }}
+        name: Release ${{ inputs.release_tag }}
+        body: |
+          MsOffice Extensions Release
+          
+          This release contains builds for:
+          - 2024 Version
+          - 2025 Version
+          - 2026 Version
+          
+          Each zip file contains:
+          - powerJobs/Jobs/Sample.MsOffice.CreatePDF.ps1
+          - powerJobs/Modules/register-MsOffice-application.psm1
+          - powerJobs/Modules/MsOffice/coolOrange.MsOffice.dll
+        files: |
+          artifacts/msoffice-2024/MsOffice-2024.zip
+          artifacts/msoffice-2025/MsOffice-2025.zip
+          artifacts/msoffice-2026/MsOffice-2026.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

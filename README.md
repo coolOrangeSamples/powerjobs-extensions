@@ -21,6 +21,24 @@ This repository contains the code for custom powerJobs application for
 It also contains the installer and its source code.
 
 Developers willing to extend powerJobs to support other applications can do so by looking at the code and sample job provided here. More information on how to create your custom application for powerJobs can be found at powerJob's [product documentation](https://doc.coolorange.com/projects/coolorange-powerjobsprocessordocs/en/stable/jobprocessor/applications.html#custom-applications)
+
+## Building and Releasing
+This repository includes a GitHub Actions workflow that builds the MsOffice project for multiple versions (2024, 2025, and 2026) and creates a GitHub release with zip files for each version.
+
+### How to trigger a release
+1. Go to the **Actions** tab in the GitHub repository
+2. Select **Build and Release Multiple Versions** workflow
+3. Click **Run workflow**
+4. Enter a release tag name (e.g., `v1.0.0`)
+5. Click **Run workflow** button
+
+The workflow will:
+- Build the MsOffice project from the `2024-version`, `2025-version`, and `2026-Version` branches
+- Create zip files for each version containing:
+  - `powerJobs/Jobs/Sample.MsOffice.CreatePDF.ps1`
+  - `powerJobs/Modules/register-MsOffice-application.psm1`
+  - `powerJobs/Modules/MsOffice/coolOrange.MsOffice.dll`
+- Create a GitHub release with all three zip files attached
 ## At your own risk
 The usage of these samples is at your own risk. There is no free support related to the samples. However, if you have questions to powerJobs, then visit http://www.coolorange.com/wiki or start a conversation in our support forum at http://support.coolorange.com/support/discussions
 
