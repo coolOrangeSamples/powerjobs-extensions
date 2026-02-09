@@ -8,10 +8,15 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+
 jobs:
   build-2024:
     name: Build 2024 Version
     runs-on: windows-latest
+    permissions:
+      contents: read
     
     steps:
     - name: Checkout 2024 branch
@@ -55,6 +60,8 @@ jobs:
   build-2025:
     name: Build 2025 Version
     runs-on: windows-latest
+    permissions:
+      contents: read
     
     steps:
     - name: Checkout 2025 branch
@@ -98,6 +105,8 @@ jobs:
   build-2026:
     name: Build 2026 Version
     runs-on: windows-latest
+    permissions:
+      contents: read
     
     steps:
     - name: Checkout 2026 branch
@@ -142,6 +151,8 @@ jobs:
     name: Create GitHub Release
     needs: [build-2024, build-2025, build-2026]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - name: Download all artifacts
