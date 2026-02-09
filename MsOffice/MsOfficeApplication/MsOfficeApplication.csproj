@@ -10,7 +10,7 @@
     <RootNamespace>coolOrange.MsOffice</RootNamespace>
     <AssemblyName>coolOrange.MsOffice</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>    
+    <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -58,8 +58,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="powerJobs.Common">
-      <HintPath>.\powerJobs.Common.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\References\2026\powerJobs.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
