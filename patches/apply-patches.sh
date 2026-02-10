@@ -20,19 +20,30 @@ CURRENT_BRANCH=$(git branch --show-current)
 echo "Current branch: $CURRENT_BRANCH"
 echo ""
 
-# Define branches and their patch directories
+# Create temp directory for patches if needed
+TEMP_PATCH_DIR="/tmp/powerjobs-patches-$$"
+mkdir -p "$TEMP_PATCH_DIR"
+
+# Extract patches from the copilot branch to temp directory
+echo "Extracting patches from copilot/update-microsoft-office-docs branch..."
+git show copilot/update-microsoft-office-docs:patches/2024/0001-Update-MsOffice-ReadMe-with-zip-file-installation-in.patch > "$TEMP_PATCH_DIR/2024.patch"
+git show copilot/update-microsoft-office-docs:patches/2025/0001-Update-MsOffice-ReadMe-with-zip-file-installation-in.patch > "$TEMP_PATCH_DIR/2025.patch"
+git show copilot/update-microsoft-office-docs:patches/2026/0001-Update-MsOffice-ReadMe-with-zip-file-installation-in.patch > "$TEMP_PATCH_DIR/2026.patch"
+echo "✅ Patches extracted to $TEMP_PATCH_DIR"
+echo ""
+
+# Define branches and their patch files
 declare -A BRANCHES
-BRANCHES[2024-version]="patches/2024"
-BRANCHES[2025-version]="patches/2025"
-BRANCHES[2026-Version]="patches/2026"
+BRANCHES[2024-version]="$TEMP_PATCH_DIR/2024.patch"
+BRANCHES[2025-version]="$TEMP_PATCH_DIR/2025.patch"
+BRANCHES[2026-Version]="$TEMP_PATCH_DIR/2026.patch"
 
 SUCCESS_COUNT=0
 FAILED_BRANCHES=()
 
 # Apply patches to each branch
 for BRANCH in "${!BRANCHES[@]}"; do
-    PATCH_DIR="${BRANCHES[$BRANCH]}"
-    PATCH_FILE="$PATCH_DIR/0001-Update-MsOffice-ReadMe-with-zip-file-installation-in.patch"
+    PATCH_FILE="${BRANCHES[$BRANCH]}"
     
     echo "-------------------------------------------"
     echo "Processing branch: $BRANCH"
@@ -69,6 +80,9 @@ for BRANCH in "${!BRANCHES[@]}"; do
         FAILED_BRANCHES+=("$BRANCH (patch apply failed)")
     fi
 done
+
+# Clean up temp directory
+rm -rf "$TEMP_PATCH_DIR"
 
 # Return to original branch
 echo "-------------------------------------------"
