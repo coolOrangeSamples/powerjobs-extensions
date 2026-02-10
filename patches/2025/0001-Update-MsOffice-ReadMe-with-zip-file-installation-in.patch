@@ -1,0 +1,86 @@
+From c839af8c356a4437d5057ffdde39a6a3a97f3f26 Mon Sep 17 00:00:00 2001
+From: "copilot-swe-agent[bot]" <198982749+Copilot@users.noreply.github.com>
+Date: Tue, 10 Feb 2026 08:25:04 +0000
+Subject: [PATCH] Update MsOffice ReadMe with zip file installation
+ instructions for 2025-version
+
+---
+ MsOffice/ReadMe.md | 48 ++++++++++++++++++++++++++++++----------------
+ 1 file changed, 32 insertions(+), 16 deletions(-)
+
+diff --git a/MsOffice/ReadMe.md b/MsOffice/ReadMe.md
+index 197411b..b963cf5 100644
+--- a/MsOffice/ReadMe.md
++++ b/MsOffice/ReadMe.md
+@@ -17,10 +17,12 @@ Following applications are required for running this job:
+ -   powerJobs 2022 stream (v22.0.20 and above)
+ 
+ #### Installation
+-Use the installer found in the release page and follow the instructions. After the installation is complete, you will find 
+-- New job "Sample.MsOffice.CreatePDF.ps1" added to the Jobs folder. 
+-- New module 'MsOfficeLoad.psm1' added to the modules folder 
+-- New custom powerJobs application 'MsOfficeApplication.dll' in the subfolder 'MsOfficeSupport' under the modules folder.
++Download the zip file from the [release page](https://github.com/coolOrangeLabs/powerjobs-extensions/releases) and extract its contents. After extracting, you will find:
++- A new job "Sample.MsOffice.CreatePDF.ps1" in the Jobs folder.
++- A new custom powerJobs application 'coolorange.MsOffice.dll' in the subfolder 'MsOffice' under the modules folder.
++- A new module 'register-MsOffice-application.psm1' in the modules folder.
++
++Follow the instructions provided in the release notes to complete the setup.
+ 
+ #### Setting and running the job
+ Rename the installed sample jobs so that your job can be identified as custom job and will not be overwritten by future updates. You can modify this copied job as you please.
+@@ -29,25 +31,39 @@ Depending on the needs, the job can be triggered to run automatically during lif
+ Further information on how to setup and run the job on lifecycle state change can be found on [powerJob's Getting Started documentation](https://doc.coolorange.com/projects/coolorange-powerjobsprocessordocs/en/stable/getting_started.html#how-to-embed-the-job-in-a-status-change)
+ 
+ ### Upgrade the powerJobs extension
+-The powerJobs extension will work only with powerJobs **2022 streams** (equal or greater than 22.0.20). For newer powerJobs' streams you will need to build and compile this solution. Follow the steps below to upgrade the powerJobs extension to support newer powerJobs version.
++The powerJobs extension currently supports three streams, each maintained in their respective branches:
++- **2024-version**: Compatible with powerJobs 2024 versions.
++- **2025-version**: Compatible with powerJobs 2025 versions.
++- **2026-version**: Compatible with powerJobs 2026 versions.
++
++For newer powerJobs versions, you will need to build and compile this solution. Follow the steps below to upgrade the powerJobs extension to support newer powerJobs versions.
++
+ #### Prerequisite
+-- Find and install the wix toolset found on the [Wix](https://wixtoolset.org/). This is necessary because the the installer project is made using the wix toolset. 
+ - Install or upgrade powerJobs Processor on your development machine.
+-- Clone this repository
++- Clone this repository and create a new branch from the master e.g. 2027-version.
++- Install Visual Studio with the required .NET development tools.
++
+ #### Build Solution
+-- Open the Visual Studio solution which can be found under [MsOffice](/MsOffice).
+-- In Visual Studio right-click on References and click “Add References”.
+-- Search for the assembly powerJobs.Common” in Assemblies-tab and add it to your project.
+-[see here](https://doc.coolorange.com/projects/coolorange-powerjobsprocessordocs/en/stable/_images/vs_add_reference.png)
+-- Replace the UpgradeCode with existing GUID found in [ProductVariables.wxi](https://github.com/coolOrangeLabs/powerjobs-extensions/blob/0973f254b52c9e85c144df1a9ffe39e794c08aa0/MsOffice/Installer/Includes/ProductVariables.wxi#L3)
+-- Build the solution
++1. Open the Visual Studio solution located under the [MsOffice](/MsOffice) folder.
++2. In Visual Studio, right-click on `References` and select **Add References**.
++3. Search for the assembly `powerJobs.Common` in the **Assemblies** tab and add it to your project.  
++   ![Add Reference](https://doc.coolorange.com/projects/coolorange-powerjobsprocessordocs/en/stable/_images/vs_add_reference.png)
++4. Replace the `UpgradeCode` with the existing GUID found in [ProductVariables.wxi](https://github.com/coolOrangeLabs/powerjobs-extensions/blob/0973f254b52c9e85c144df1a9ffe39e794c08aa0/MsOffice/Installer/Includes/ProductVariables.wxi#L3).
++5. Build the solution.
++
++#### Output Files
++After building the solution, the following file will be generated:
++- **coolorange.MsOffice.dll**: The custom powerJobs application.
+ 
+-If the build went through and you don't have any errors, then you can use the installer 'powerJobs.MSOfficePlugin.Setup_1.0.0.0_x64.msi'  which you will find in the VS Installer project's output folder.
++To complete the setup, copy the following files from the source repository:
++- **coolorange.MsOffice.dll**: Place this file in the `MsOffice` subfolder under the `modules` folder.
++- **register-MsOffice-application.psm1**: Copy this file to the `modules` folder.
++- **Sample.MsOffice.CreatePDF.ps1**: Copy the sample job script from the `Jobs` folder to your `Jobs` directory.
+ 
+-Further information on how to create custom application for powerJobs can be found on the [powerJobs documentation](https://doc.coolorange.com/projects/coolorange-powerjobsprocessordocs/en/stable/jobprocessor/applications.html#custom-applications).
++Further information on how to create custom applications for powerJobs can be found in the [powerJobs documentation](https://doc.coolorange.com/projects/coolorange-powerjobsprocessordocs/en/stable/jobprocessor/applications.html#custom-applications).
+ 
+ ## At your own risk
+-The usage of these samples is at your own risk. There is no free support related to the samples. However, if you have questions to powerJobs, then visit http://www.coolorange.com/wiki or start a conversation in our support forum at http://support.coolorange.com/support/discussions
++The usage of these samples is at your own risk. There is no free support related to the samples. However, if you have questions about powerJobs, then visit http://www.coolorange.com/wiki or start a conversation in our support forum at http://support.coolorange.com/support/discussions.
+ 
+ ## Author
+ coolOrange S.r.l.
+-- 
+2.52.0
+
