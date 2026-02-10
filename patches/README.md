@@ -42,9 +42,13 @@ chmod +x patches/apply-patches.sh
 
 This script will:
 1. Extract patches from the git history
-2. Apply each patch to its respective branch
-3. Show you the changes made
-4. Provide commands to push the changes
+2. Reset each local branch to match the remote (ensuring a clean state)
+3. Check if patches are already applied (to avoid duplicate application)
+4. Apply each patch to its respective branch
+5. Show you the changes made
+6. Provide commands to push the changes
+
+**Note:** The script automatically resets local branches to match their remote counterparts before applying patches. This ensures patches apply cleanly even if you have local commits. If you have uncommitted changes, stash them first with `git stash`.
 
 After running the script, push the changes:
 ```bash

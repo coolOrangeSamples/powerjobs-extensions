@@ -58,9 +58,39 @@ for BRANCH in "${!BRANCHES[@]}"; do
     
     # Checkout the branch
     echo "Checking out branch $BRANCH..."
-    if ! git checkout "$BRANCH" 2>&1; then
-        echo "❌ ERROR: Failed to checkout branch $BRANCH"
-        FAILED_BRANCHES+=("$BRANCH (checkout failed)")
+    
+    # Check if local branch exists, if not create it from remote
+    if ! git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+        if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+            echo "Creating local branch $BRANCH from origin/$BRANCH..."
+            git checkout -b "$BRANCH" "origin/$BRANCH"
+        else
+            echo "❌ ERROR: Branch $BRANCH does not exist locally or remotely"
+            FAILED_BRANCHES+=("$BRANCH (branch not found)")
+            continue
+        fi
+    else
+        if ! git checkout "$BRANCH" 2>&1; then
+            echo "❌ ERROR: Failed to checkout branch $BRANCH"
+            FAILED_BRANCHES+=("$BRANCH (checkout failed)")
+            continue
+        fi
+    fi
+    
+    # Check if remote branch exists and reset to it
+    if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+        echo "Resetting $BRANCH to match origin/$BRANCH..."
+        git reset --hard "origin/$BRANCH"
+    else
+        echo "⚠️  Warning: Remote branch origin/$BRANCH not found, using local branch as-is"
+    fi
+    
+    # Check if the patch has already been applied by looking for the expected changes
+    if grep -q "Download the zip file from the \[release page\]" "MsOffice/ReadMe.md" 2>/dev/null; then
+        echo "ℹ️  Patch appears to already be applied to $BRANCH (found expected changes)"
+        echo "✅ Skipping patch application for $BRANCH"
+        SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+        echo ""
         continue
     fi
     
